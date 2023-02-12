@@ -29,7 +29,8 @@ void ReadCSVData::InitializeFiles(ClientContext &context, const vector<string> &
 	for (auto &file_pattern : patterns) {
 		auto found_files = fs.Glob(file_pattern, context);
 		if (found_files.empty()) {
-			throw IOException("No files found that match the pattern \"%s\"", file_pattern);
+			throw IOException("No files found that match the pattern \"%s\"%s", file_pattern, 
+				(StringUtil::Lower(file_pattern).compare(0, 4, "http")==0?". Perhaps you forgot to install and load the httpfs extension.":""));
 		}
 		files.insert(files.end(), found_files.begin(), found_files.end());
 	}
